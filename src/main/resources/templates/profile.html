@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}">
+<head>
+    <meta charset="UTF-8">
+    <title>User Details</title>
+</head>
+<body>
+    <div id="content">
+        <div class="container navbar-container d-flex justify-content-center" style="background-color: cyan;">
+            <nav class="nav flex-row">
+                <a class="nav-link active" aria-current="page" href="http://localhost:8080/profile/contacts">Contacts</a>
+                <a class="nav-link" href="http://localhost:8080/addContact">Add</a>
+                <a class="nav-link" href="#">Edit</a>
+            </nav>
+        </div>
+
+        <div class="container text-center" style="margin-top: 25px;">
+            <div class="row">
+                <div class="col"></div>
+                <div class="col" data-th-object="${user}">
+                    <table style="border: 1px solid blue; width: 100%;">
+                        <tr>
+                            <td colspan="2" style="text-align: center;">
+                                <img alt="User Image" data-th-src="*{imageUrl}" 
+                                     style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover;" />
+                            </td>
+                        </tr>
+                        <trstyle="border: 1px solid blue;">
+                            <td style="border: 1px solid blue;"><strong>Name:</strong></td>
+                            <td style="border: 1px solid blue;"><span data-th-text="*{name}"></span></td>
+                        </tr>
+                        <tr style="border: 1px solid blue;">
+                            <td style="border: 1px solid blue;"><strong>Email:</strong></td>
+                            <td style="border: 1px solid blue;"><span data-th-text="*{email}"></span></td>
+                        </tr>
+                        <tr style="border: 1px solid blue;">
+                            <td style="border: 1px solid blue;"><strong>Phone Number:</strong></td>
+                            <td style="border: 1px solid blue;"><span data-th-text="*{phoneNumber}"></span></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        console.log("User Details page loaded");
+    </script>
+</body>
+</html>

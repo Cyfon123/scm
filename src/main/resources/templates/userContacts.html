@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en"
+	th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}">
+<head>
+<meta charset="UTF-8">
+<title>Contacts</title>
+
+</head>
+<body>
+
+<div id="content">
+    <div class="container navbar-container d-flex justify-content-center"
+        style="background-color: cyan;">
+        <nav class="nav flex-row">
+            <a class="nav-link active" aria-current="page"
+                href="http://localhost:8080/profile/contacts">Contacts</a> <a
+                class="nav-link" href="http://localhost:8080/addContact">Add</a>
+        </nav>
+    </div>
+    <div class="container text-center mt-5">
+
+        
+       <!--  <div class="filter-input" style ="margin-bottom: 10px;">
+            <input type="text" id="emailFilter" placeholder="Filter by Email" class="form-control">
+        </div>
+        <div class="filter-input" style ="margin-bottom: 10px;">
+            <input type="text" id="nameFilter" placeholder="Filter by Name" class="form-control">
+        </div>
+        <div class="filter-input" style ="margin-bottom: 10px;">
+            <input type="text" id="phoneFilter" placeholder="Filter by Phone Number" class="form-control">
+        </div> -->
+        
+
+
+        <!-- Table -->
+        <table  id="tblexportData" class="table table-bordered border-primary table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Photo</th>
+                    <th>Email <input type="text" id="emailFilter" placeholder="Search by Email" 
+                               style="width: 100%; box-sizing: border-box;" /></th>
+                    <th>Name <input type="text" id="nameFilter" placeholder="Search by Name" 
+                               style="width: 100%; box-sizing: border-box;" /></th>
+                    <th>Phone Number  <input type="text" id="phoneFilter" placeholder="Search by Phone Number" 
+                               style="width: 100%; box-sizing: border-box;" /></th>
+                    <th>Actions</th>
+                </tr> 
+               <!--   <tr>
+                    <th>Email </th>
+                    <th>Name </th>
+                    <th>Phone Number</th>
+                    <th>Actions</th>
+                </tr> -->
+            </thead>
+            <tbody id="contactsTableBody">
+                <tr th:each="contact : ${contacts}">
+                    <td>  <img alt="User Image" data-th-src="${contact.ImageUrl}"  style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;"/>	</td>
+                    <td th:text="${contact.email}"></td>
+                    <td th:text="${contact.name}"></td>
+                    <td th:text="${contact.phoneNumber}"></td>
+                    <td>
+                        <a th:href="@{http://localhost:8080/profile/contacts/edit/{contactId}(contactId=${contact.contactId})}" class="btn btn-primary btn-sm me-2">Edit</a>
+                        <a th:href="@{http://localhost:8080/profile/contacts/delete/{contactId}(contactId=${contact.contactId})}" class="btn btn-danger btn-sm me-2">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button id="exportButton" class="btn btn-success mb-3" onclick="exportToExcel('tblexportData')">Export to Excel</button>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const emailFilter = document.getElementById('emailFilter');
+        const nameFilter = document.getElementById('nameFilter');
+        const phoneFilter = document.getElementById('phoneFilter');
+        const tableBody = document.getElementById('contactsTableBody');
+        const exportButton = document.getElementById('exportButton');
+
+        function filterTable() {
+            const emailValue = emailFilter.value.toLowerCase();
+            const nameValue = nameFilter.value.toLowerCase();
+            const phoneValue = phoneFilter.value.toLowerCase();
+
+            Array.from(tableBody.getElementsByTagName('tr')).forEach(row => {
+                const email = row.children[0].textContent.toLowerCase();
+                const name = row.children[1].textContent.toLowerCase();
+                const phone = row.children[2].textContent.toLowerCase();
+
+                row.style.display = (email.includes(emailValue) && name.includes(nameValue) && phone.includes(phoneValue)) ? '' : 'none';
+            });
+        }
+
+        emailFilter.addEventListener('input', filterTable);
+        nameFilter.addEventListener('input', filterTable);
+        phoneFilter.addEventListener('input', filterTable);
+        
+      
+    });
+</script>
+<script type="text/javascript">
+function exportToExcel(tableID, filename = ''){
+    var downloadurl;
+    var dataFileType = 'application/vnd. ms-excel';
+    var tableSelect = document.getElementById(tableID);
+    var tableHTMLData = tableSelect.outerHTML.replace(/ /g, '%20');
+    
+    // Specify file name
+    filename = filename?filename+'.xls':'export_excel_data.xls';
+    
+    // Create download link element
+    downloadurl = document.createElement("a");
+    
+    document.body.appendChild(downloadurl);
+    
+    if(navigator.msSaveOrOpenBlob){
+        var blob = new Blob(['\ufeff', tableHTMLData], {
+            type: dataFileType
+        });
+        navigator.msSaveOrOpenBlob( blob, filename);
+    }else{
+        // Create a link to the file
+        downloadurl.href = 'data:' + dataFileType + ', ' + tableHTMLData;
+    
+        // Setting the file name
+        downloadurl.download = filename;
+        
+        //triggering the function
+        downloadurl.click();
+    }
+}
+ 
+</script>
+
+</body>
+</html>

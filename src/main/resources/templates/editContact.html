@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"
+  th:replace="~{base :: parent(~{::#content},~{::title},~{::script})}">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Contact</title>
+</head>
+<body>
+
+<div id="content">
+    <!-- Navigation Bar -->
+    <div class="container navbar-container d-flex justify-content-center" style="background-color: cyan;">
+        <nav class="nav flex-row">
+            <a class="nav-link active" aria-current="page" href="http://localhost:8080/profile/contacts">Contacts</a> 
+            <a class="nav-link" href="http://localhost:8080/addContact">Add</a>
+            <a class="nav-link disable" href="#">Edit</a>
+        </nav>
+    </div>
+
+    <!-- Form for Editing Contact -->
+    <div class="container text-center mt-5">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col border border-primary border-5">
+                <div>
+                   <form data-th-action="@{'/do-editContact'}" method="post" enctype="multipart/form-data" data-th-object="${contact}">
+    <!-- Hidden field for contactId -->
+    <input type="hidden" name="contactId" data-th-value="${contact.contactId}" />
+
+    <div class="mb-3">
+        <label for="email" class="form-label">Email Address</label>
+        <input type="email" class="form-control" id="email" data-th-field="*{email}" required>
+        <!-- Show error for email -->
+        <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" data-th-field="*{name}" required>
+        <!-- Show error for name -->
+        <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+    </div>
+
+    <div class="mb-3">
+        <label for="phoneNumber" class="form-label">Phone Number</label>
+        <input type="text" class="form-control" id="phoneNumber" maxlength="15" data-th-field="*{phoneNumber}" required>
+        <!-- Show error for phone number -->
+        <div class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></div>
+    </div>
+    <input type="hidden" name="imageUrl" data-th-value="${contact.imageUrl}" />
+    
+    
+    
+    
+
+    <button type="submit" class="btn btn-primary mb-3">Save Changes</button>
+    <button type="reset" class="btn btn-danger mb-3">Reset</button>
+</form>
+
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    console.log("Edit Contact page");
+</script>
+
+</body>
+</html>
